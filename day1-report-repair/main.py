@@ -3,10 +3,12 @@
 
 def read_input():
     with open("input", "r") as input_file:
-        return [int(line) for line in input_file.read().splitlines()]
+        input_list = [int(line) for line in input_file.read().splitlines()]
+        print(f"Read input list {input_list}")
+        return input_list
 
 
-def find_addends(numbers, target):
+def find_two_addends(numbers, target):
     for i in numbers:
         for j in numbers:
             if i != j:
@@ -14,9 +16,11 @@ def find_addends(numbers, target):
                     return i, j
 
 
-if __name__ == '__main__':
-    input_list = read_input()
-    print(f"Read input list {input_list}")
-    a, b = find_addends(input_list, 2020)
+def solve_part_1():
+    a, b = find_two_addends(read_input(), 2020)
     print(f"Found addends {a} and {b} that add up to 2020")
-    print(f"Result of multiplication is {a*b}")
+    print(f"Result of multiplication is {a * b}")
+
+
+if __name__ == '__main__':
+    solve_part_1()
