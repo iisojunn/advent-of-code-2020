@@ -9,11 +9,11 @@ def read_input():
 
 
 def find_two_addends(numbers, target):
-    for i in numbers:
-        for j in numbers:
-            if i != j:
-                if i + j == target:
-                    return i, j
+    for x in numbers:
+        for y in numbers:
+            if x != y:
+                if x + y == target:
+                    return x, y
 
 
 def solve_part_1():
@@ -22,5 +22,20 @@ def solve_part_1():
     print(f"Result of multiplication is {a * b}")
 
 
+def find_three_addends(numbers, target):
+    for z in numbers:
+        sub_target = target - z
+        result = find_two_addends(numbers, sub_target)
+        if result is not None:
+            return result[0], result[1], z
+
+
+def solve_part_2():
+    a, b, c = find_three_addends(read_input(), 2020)
+    print(f"Found three addends {a}, {b}, {c} that add up to 2020")
+    print(f"Result of multiplication is {a * b * c}")
+
+
 if __name__ == '__main__':
     solve_part_1()
+    solve_part_2()
