@@ -20,11 +20,7 @@ def is_valid(passport):
 
 
 def count_valid(passports):
-    valid = 0
-    for passport in passports:
-        if is_valid(passport):
-            valid += 1
-    return valid
+    return [is_valid(passport) for passport in passports].count(True)
 
 
 if __name__ == '__main__':
