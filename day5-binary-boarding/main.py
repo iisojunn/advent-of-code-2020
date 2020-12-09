@@ -31,8 +31,21 @@ def calculate_seat_id(boarding_pass):
            + column_number(lr_to_01(boarding_pass[7:]))
 
 
+def find_my_seat(seats):
+    for seat_id in range(128 * 8):
+        if is_my_seat(seat_id, seats):
+            return seat_id
+
+
+def is_my_seat(seat_id, seats):
+    seat_not_reserved = seat_id not in seats
+    neighbour_seats_reserved = seat_id - 1 in seats and seat_id + 1 in seats
+    return seat_not_reserved and neighbour_seats_reserved
+
+
 if __name__ == '__main__':
     seat_ids = [calculate_seat_id(boarding_pass) for boarding_pass in
                 read_input()]
     seat_ids.sort(reverse=True)
     print(f"Highest seat_id {seat_ids[0]}")
+    print(f"My seat {find_my_seat(seat_ids)}")
