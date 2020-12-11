@@ -12,7 +12,7 @@ def read_input():
 
 def parse_content(content):
     match = re.match(CONTENTS_REGEX, content)
-    return match.group("bag_name"), match.group("bag_amount")
+    return match.group("bag_name"), int(match.group("bag_amount"))
 
 
 def parse_contents(contents):
@@ -57,7 +57,21 @@ def bags_that_can_contain(bag_name):
     return found
 
 
+def bags_required_inside(bag_name, bag_count):
+    total_bags = 0
+    to_check = [(bag_name, bag_count)]
+    while to_check:
+        parent_bag_name, parent_bag_count = to_check.pop()
+        for required_bag, required_amount in BAGS[parent_bag_name].items():
+            required_bag_count = required_amount * parent_bag_count
+            total_bags += required_bag_count
+            to_check.append((required_bag, required_bag_count))
+    return total_bags
+
+
 if __name__ == '__main__':
     BAGS = parse_bags(read_input())
     total = len(bags_that_can_contain('shiny gold'))
     print(f"Shiny gold bag can be in {total} bags.")
+    required_bags = bags_required_inside("shiny gold", 1)
+    print(f"Shiny gold bag requires {required_bags} inside it.")
