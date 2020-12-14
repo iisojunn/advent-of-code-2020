@@ -20,7 +20,25 @@ def find_invalid_number(numbers):
             return number
 
 
+def calculate_weakness(numbers, start, end):
+    contiguous_set = numbers[start:end]
+    return min(contiguous_set) + max(contiguous_set)
+
+
+def find_weakness(numbers, target):
+    for i, num in enumerate(numbers):
+        current = num
+        for k in range(i + 1, len(numbers)):
+            current += numbers[k]
+            if current == target:
+                return calculate_weakness(numbers, i, k)
+            if current > target:
+                break
+
+
 if __name__ == '__main__':
-    print(read_input())
-    invalid = find_invalid_number(read_input())
+    NUMBERS = read_input()
+    invalid = find_invalid_number(NUMBERS)
     print(f"First number without valid property {invalid}")
+    weakness = find_weakness(NUMBERS, invalid)
+    print(f"The encryption weakness is {weakness}")
