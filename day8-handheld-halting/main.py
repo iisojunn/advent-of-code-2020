@@ -13,25 +13,29 @@ def parse_value(argument):
     return -value
 
 
-def execute_instruction(instruction):
-    global accumulator, instruction_index
+def execute(instruction, acc, code_index):
     operation, argument = instruction.split(" ")
     if operation == "jmp":
-        instruction_index += parse_value(argument)
+        code_index += parse_value(argument)
     elif operation == "acc":
-        accumulator += parse_value(argument)
-        instruction_index += 1
+        acc += parse_value(argument)
+        code_index += 1
     elif operation == "nop":
-        instruction_index += 1
+        code_index += 1
+    return acc, code_index
+
+
+def execute_until_second_loop_starts(code):
+    acc = 0
+    code_index = 0
+    visited = []
+    while code_index not in visited:
+        visited.append(code_index)
+        acc, code_index = execute(code[code_index], acc, code_index)
+    return acc
 
 
 if __name__ == '__main__':
-    code = read_input()
-    accumulator = 0
-    instruction_index = 0
-    visited = []
-    while instruction_index not in visited:
-        visited.append(instruction_index)
-        execute_instruction(code[instruction_index])
-
+    CODE = read_input()
+    accumulator = execute_until_second_loop_starts(CODE)
     print(f"Accumulator value before second visit is {accumulator}")
