@@ -1,4 +1,5 @@
 """Day 9 Advent of code"""
+from itertools import islice
 
 
 def read_input():
@@ -7,15 +8,13 @@ def read_input():
 
 
 def sums_of_two(nums):
-    for i, num in enumerate(nums):
-        for k in range(i + 1, len(nums)):
-            yield num + nums[k]
+    for i, num1 in enumerate(nums):
+        for num2 in islice(nums, i + 1):
+            yield num1 + num2
 
 
 def find_invalid_number(numbers):
-    for i, number in enumerate(numbers):
-        if i < 25:
-            continue
+    for i, number in enumerate(numbers[25:], start=25):
         if number not in sums_of_two(numbers[i-25:i]):
             return number
 
