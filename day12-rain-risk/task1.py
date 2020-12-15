@@ -1,7 +1,7 @@
-"""Day 12 Advent of code"""
+"""Day 12 Advent of code task 1"""
 
 FACING_MAP = {
-    0:  (1, 0),
+    0: (1, 0),
     90: (0, 1),
     180: (-1, 0),
     270: (0, -1),
@@ -65,7 +65,7 @@ COMMANDS = {
 
 
 def follow_instructions(instructions):
-    north_, east_, = 0, 0
+    north_, east_ = 0, 0
     facing = (0, 1)
     for cmd, amount in [(instr[0], int(instr[1:])) for instr in instructions]:
         north_, east_, facing = COMMANDS[cmd](amount, north_, east_, facing)
