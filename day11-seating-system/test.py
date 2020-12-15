@@ -18,14 +18,14 @@ class TestSeatOccupancy(unittest.TestCase):
         self.assertTrue(seats_changed(reversed(self.layout), self.layout))
 
     def test_is_congested(self):
-        self.assertFalse(is_congested(["#", ".", "L"]))
-        self.assertFalse(is_congested(["#", "#", "#"]))
-        self.assertTrue(is_congested(["#", "#", "#", "#"]))
-        self.assertTrue(is_congested(["#", "#", "#", "#", "#"]))
+        self.assertFalse(is_congested(["#", ".", "L"], 4))
+        self.assertFalse(is_congested(["#", "#", "#"], 4))
+        self.assertTrue(is_congested(["#", "#", "#", "#"], 4))
+        self.assertTrue(is_congested(["#", "#", "#", "#", "#"], 4))
 
     def test_adjacent_spots(self):
         self.assertEqual(adjacent_spots(self.layout, 2, 0),
                          ['.', 'L', 'L', 'L', 'L'])
 
     def test_new_status(self):
-        self.assertEqual(new_status(self.layout, 2, 0), "#")
+        self.assertEqual(new_status("L", ['.', 'L', 'L', 'L', 'L'], 4), "#")
