@@ -1,4 +1,5 @@
 """Day 14 Advent of code"""
+from itertools import product
 
 
 def read_input():
@@ -51,7 +52,41 @@ def execute(init_script):
     return memory
 
 
+def apply_mask_to_mem_bit(mask_bit, mem_bit):
+    if mask_bit in "1X":
+        return mask_bit
+    return mem_bit
+
+
+def masked_addresses(mask, memory):
+    floating_address = get_floating_address(mask, memory)
+    for floating_bits in product('10', repeat=floating_address.count("X")):
+        address = floating_address
+        for bit in floating_bits:
+            address = address.replace("X", bit, 1)
+        yield int(address, 2)
+
+
+def get_floating_address(mask, memory):
+    address = [apply_mask_to_mem_bit(mask_bit, mem_bit) for mask_bit, mem_bit
+               in zip(mask, convert_to_bits(memory))]
+    return "".join(address)
+
+
+def execute_v2(init_script):
+    memory = {}
+    for mask, commands in instructions(init_script):
+        for cmd in commands:
+            addresses = masked_addresses(mask, cmd["mem"])
+            for mem in addresses:
+                memory[mem] = cmd["value"]
+    return memory
+
+
 if __name__ == '__main__':
     script = read_input()
     MEMORY = execute(script)
     print(f"Sum of values in memory {sum(MEMORY.values())}")
+
+    MEMORY2 = execute_v2(script)
+    print(f"Sum of values in memory with v2 {sum(MEMORY2.values())}")
