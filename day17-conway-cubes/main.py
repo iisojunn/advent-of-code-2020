@@ -1,8 +1,8 @@
 """Day 17 Advent of code"""
 from collections import defaultdict
-from itertools import chain
+from itertools import chain, product
 
-ACTIVE = "#"
+ACTIVE_MARK = "#"
 
 
 def read_input():
@@ -10,29 +10,27 @@ def read_input():
         return [list(row) for row in input_file.read().splitlines()]
 
 
-def initialize_cubes(list2d):
+def initialize_cubes(list2d, padding):
     active = set()
-    print(list2d)
     for y, row in enumerate(list2d):
         for x, status in enumerate(row):
-            if status == ACTIVE:
-                active.add((x, y, 0))
+            if status == ACTIVE_MARK:
+                active.add((x, y, *padding))
     return active
 
 
-def neighbours_of(x, y, z):
+def neighbours_of(coordinates):
     neighbours = []
-    for x0 in [x - 1, x, x + 1]:
-        for y0 in [y - 1, y, y + 1]:
-            for z0 in [z - 1, z, z + 1]:
-                if (x0 != x) or (y0 != y) or (z0 != z):
-                    neighbours.append((x0, y0, z0))
+    for delta in product([-1, 0, 1], repeat=len(coordinates)):
+        if not all(d == 0 for d in delta):
+            neighbours.append(
+                tuple(dx + x for dx, x in zip(delta, coordinates)))
     return neighbours
 
 
 def affected_neighbours(active):
     affected = defaultdict(int)
-    neighbours = [neighbours_of(x, y, z) for x, y, z in active]
+    neighbours = [neighbours_of(coordinates) for coordinates in active]
     for coordinates in chain(*neighbours):
         affected[coordinates] += 1
     return affected
@@ -42,16 +40,18 @@ def play_cycle(active):
     active_after_cycle = set()
     neighbours = affected_neighbours(active)
     for cube, amount in neighbours.items():
-        if amount == 3:
-            active_after_cycle.add(cube)
-        elif amount == 2 and cube in active:
+        if amount == 3 or (amount == 2 and cube in active):
             active_after_cycle.add(cube)
     return active_after_cycle
 
 
 if __name__ == '__main__':
-    ACTIVE = initialize_cubes(read_input())
-    for i in range(6):
+    ACTIVE = initialize_cubes(read_input(), (0,))
+    for _ in range(6):
         ACTIVE = play_cycle(ACTIVE)
-
     print(f"Active cubes after 6 cycles {len(ACTIVE)}")
+
+    ACTIVE = initialize_cubes(read_input(), (0, 0))
+    for _ in range(6):
+        ACTIVE = play_cycle(ACTIVE)
+    print(f"Active hypercubes after 6 cycles {len(ACTIVE)}")
