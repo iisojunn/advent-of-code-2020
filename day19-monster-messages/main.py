@@ -1,8 +1,8 @@
 """Day 19 Advent of code 2020"""
 
 
-def read_input():
-    with open("input", "r") as input_file:
+def read_input(input_):
+    with open(input_, "r") as input_file:
         rules, messages = input_file.read().split("\n\n")
         return parse_rules(rules), messages.splitlines()
 
@@ -25,37 +25,40 @@ def parse_part(part):
     return tuple(int(r) for r in part.split(" "))
 
 
-def fulfils_option(message, option, rules):
-    original_message = message
-    for req in option:
+def valid_with_requirements(msg, reqs, rules):
+    if not reqs:
+        yield msg
+    else:
+        req = reqs[0]
         if type(req) == str:
-            if not message:
-                return False, original_message
-            elif message.startswith(req):
-                message = message[1:]
-                continue
-            return False, original_message
-        fulfils, message = fulfils_sub_rule(message, rules[req], rules)
-        if not fulfils:
-            return False, original_message
-    return True, message
+            if msg.startswith(req):
+                yield from valid_with_requirements(msg[1:], reqs[1:], rules)
+        else:
+            for message in valid_with_sub_rule(msg, rules[req], rules):
+                yield from valid_with_requirements(message, reqs[1:], rules)
 
 
-def fulfils_sub_rule(message, sub_rule, rules):
+def valid_with_sub_rule(message, sub_rule, rules):
     for option in sub_rule:
-        fulfils, message = fulfils_option(message, option, rules)
-        if fulfils:
-            return True, message
-    return False, message
+        yield from valid_with_requirements(message, option, rules)
 
 
 def is_valid(message, rules):
     sub_rule_to_check = rules[0]
-    fulfils, message = fulfils_sub_rule(message, sub_rule_to_check, rules)
-    return fulfils and not message
+    for msg_left in valid_with_sub_rule(message, sub_rule_to_check, rules):
+        if not msg_left:
+            return True
+    return False
 
 
 if __name__ == '__main__':
-    RULES, MESSAGES = read_input()
+    RULES, MESSAGES = read_input("input")
     VALID_MSG = [is_valid(MSG, RULES) for MSG in MESSAGES].count(True)
     print(f"There are {VALID_MSG} valid messages")
+    assert VALID_MSG == 162
+
+    RULES[8] = {(42,), (42, 8)}
+    RULES[11] = {(42, 31), (42, 11, 31)}
+    VALID_MSG = [is_valid(MSG, RULES) for MSG in MESSAGES].count(True)
+    print(f"There are {VALID_MSG} valid messages with rule changes")
+    assert VALID_MSG == 267
