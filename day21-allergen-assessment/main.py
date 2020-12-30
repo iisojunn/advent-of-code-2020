@@ -1,6 +1,6 @@
 """Day 21 Advent of code 2020"""
 import re
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 from itertools import chain
 
 FOOD_REGEX = r"(?P<ingredients>.*) \(contains (?P<allergens>.*)\)$"
@@ -54,6 +54,24 @@ def allergen_free_ingredients(ingredients, suspicious):
             free not in set(chain(*suspicious.values()))]
 
 
+def resolve_dangerous(suspicious):
+    dangerous = {}
+    while len(dangerous) != len(suspicious):
+        resolved_ingredients = set().union(*dangerous.values())
+        for allergen, ingredients in suspicious.items():
+            possible_ingredients = ingredients - resolved_ingredients
+            if len(possible_ingredients) == 1:
+                dangerous[allergen] = possible_ingredients
+    for allergen, ingredient in dangerous.items():
+        dangerous[allergen] = ingredient.pop()
+    return dangerous
+
+
+def canonical_dangerous_ingredient_list(dangerous):
+    ordered = OrderedDict(sorted(dangerous.items(), key=lambda x: x[0]))
+    return ",".join([allergen for allergen in ordered.values()])
+
+
 if __name__ == '__main__':
     FOODS = read_input()
     COUNTS = count_components(FOODS)
@@ -62,3 +80,7 @@ if __name__ == '__main__':
     ALLERGEN_FREE = allergen_free_ingredients(INGREDIENTS, SUSPICIOUS)
     APPEARANCE = sum([COUNTS[ingredient] for ingredient in ALLERGEN_FREE])
     print(f"Allergen free ingredients appear {APPEARANCE} times")
+
+    DANGEROUS = resolve_dangerous(SUSPICIOUS)
+    CANONICAL = canonical_dangerous_ingredient_list(DANGEROUS)
+    print(f"Canonical dangerous ingredient list {CANONICAL}")
