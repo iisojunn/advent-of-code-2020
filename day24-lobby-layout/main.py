@@ -17,17 +17,14 @@ def read_input():
 
 
 def parse_instructions(input_):
-    instructions = []
-    for row in input_:
-        instructions.append(parse_single_instruction(row))
-    return instructions
+    return [parse_single_instruction(row) for row in input_]
 
 
 def parse_single_instruction(row):
-    instruction = (0, 0)
+    coordinates = (0, 0)
     for direction in directions(row):
-        instruction = tuple(sum(x) for x in zip(instruction, direction))
-    return instruction
+        coordinates = tuple(sum(x) for x in zip(coordinates, direction))
+    return coordinates
 
 
 def directions(row):
@@ -39,20 +36,57 @@ def directions(row):
             direction = ""
 
 
-def tile_flip_counts(instructions):
+def black_tiles(tile_coordinates):
+    flip_counts = tile_flip_counts(tile_coordinates)
+    return set(tile for tile, count in flip_counts.items() if count % 2 == 1)
+
+
+def tile_flip_counts(tile_coordinates):
     flip_counts = defaultdict(int)
-    for tile in instructions:
+    for tile in tile_coordinates:
         flip_counts[tile] += 1
     return flip_counts
 
 
-def flipped_tiles(flip_counts):
-    return sum([x for x in flip_counts.values() if x % 2 == 1])
+def daily_flip(black_tiles_):
+    to_flip = []
+    whites_with_adj_black = defaultdict(int)
+
+    for tile in black_tiles_:
+        adj_blacks = len(adjacent_blacks(tile, black_tiles_))
+        if adj_blacks == 0 or adj_blacks > 2:
+            to_flip.append(tile)
+        for adj_white in adjacent_whites(tile, black_tiles_):
+            whites_with_adj_black[adj_white] += 1
+
+    for white, adj_blacks in whites_with_adj_black.items():
+        if adj_blacks == 2:
+            to_flip.append(white)
+
+    return black_tiles(list(black_tiles_) + to_flip)
+
+
+def adjacent_blacks(tile, black_tiles_):
+    return [x for x in adjacents(tile) if x in black_tiles_]
+
+
+def adjacents(tile):
+    for direction in DIRECTIONS.values():
+        yield tuple(sum(x) for x in zip(tile, direction))
+
+
+def adjacent_whites(tile, black_tiles_):
+    return [x for x in adjacents(tile) if x not in black_tiles_]
 
 
 if __name__ == '__main__':
     INPUT = read_input()
-    INSTRUCTIONS = parse_instructions(INPUT)
-    FLIPPED_TILES = flipped_tiles(tile_flip_counts(INSTRUCTIONS))
-    print(f"Black tiles after executing instructions {FLIPPED_TILES}")
-    assert(FLIPPED_TILES == 228)
+    TILE_COORDINATES = parse_instructions(INPUT)
+    BLACK_TILES = black_tiles(TILE_COORDINATES)
+    print(f"Black tiles after executing instructions {len(BLACK_TILES)}")
+    assert(len(BLACK_TILES) == 228)
+
+    for DAY in range(1, 101):
+        BLACK_TILES = daily_flip(BLACK_TILES)
+    print(f"Black tiles after 100 days {len(BLACK_TILES)}")
+    assert(len(BLACK_TILES) == 3672)
