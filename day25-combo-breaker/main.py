@@ -16,7 +16,7 @@ def resolve_card_loops(card_public):
 
 def resolve_encryption_key(card_loops, door_public):
     value = 1
-    for _ in range(0, card_loops):
+    for _ in range(card_loops):
         value = (value * door_public) % DIVISOR
     return value
 

@@ -14,7 +14,7 @@ class Cup:
         return str(self.label)
 
     def __repr__(self):
-        return f"{self.label} -> {str(self.next)}"
+        return f'{self.label} -> {self.next}'
 
 
 class CupCircle:
@@ -26,10 +26,7 @@ class CupCircle:
         self.populate(cup_data)
 
     def all_cups(self, start_label):
-        if start_label is None:
-            start_cup = self.first
-        else:
-            start_cup = self.cups[start_label]
+        start_cup = self.first if start_label is None else self.cups[start_label]
         cup = start_cup
         for _ in range(self.size):
             yield cup
@@ -85,7 +82,7 @@ def cup_labels(cup_circle, start=None):
 if __name__ == '__main__':
     CUP_CIRCLE = CupCircle(INPUT)
     CURRENT = CUP_CIRCLE.first
-    for move in range(1, 101):
+    for _ in range(1, 101):
         # print(f"Before move {move}:", cup_labels(CUP_CIRCLE))
         CURRENT = do_move(CURRENT, CUP_CIRCLE)
         # print()
@@ -96,7 +93,7 @@ if __name__ == '__main__':
     INPUT = [int(cup) for cup in INPUT] + [i for i in range(10, 1000000 + 1)]
     CUP_CIRCLE = CupCircle(INPUT)
     CURRENT = CUP_CIRCLE.first
-    for move in range(1, 10000001):
+    for _ in range(1, 10000001):
         CURRENT = do_move(CURRENT, CUP_CIRCLE)
     CUP1 = CUP_CIRCLE.cups[1]
     RESULT = CUP1.next.label * CUP1.next.next.label

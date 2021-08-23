@@ -27,14 +27,11 @@ def is_in_range(field, range_):
 
 
 def is_in_any_range(field, ranges):
-    return any([is_in_range(field, range_) for range_ in ranges])
+    return any(is_in_range(field, range_) for range_ in ranges)
 
 
 def is_valid(field, field_ranges):
-    for ranges in field_ranges.values():
-        if is_in_any_range(field, ranges):
-            return True
-    return False
+    return any(is_in_any_range(field, ranges) for ranges in field_ranges.values())
 
 
 def scan_tickets(field_ranges, tickets):
@@ -47,7 +44,7 @@ def scan_tickets(field_ranges, tickets):
 
 
 def is_all_in_range(ranges, field_values):
-    return all([is_in_any_range(field, ranges) for field in field_values])
+    return all(is_in_any_range(field, ranges) for field in field_values)
 
 
 def resolve_possible_field_orders(valid_tickets, field_ranges):
@@ -96,8 +93,12 @@ if __name__ == '__main__':
     ERROR_RATE = scan_tickets(FIELD_RANGES, TICKETS)
     print(f"Ticket scanning error rate is {ERROR_RATE}")
 
-    VALID_TICKETS = [ticket for ticket in TICKETS if
-                     all([is_valid(field, FIELD_RANGES) for field in ticket])]
+    VALID_TICKETS = [
+        ticket
+        for ticket in TICKETS
+        if all(is_valid(field, FIELD_RANGES) for field in ticket)
+    ]
+
     FIELD_ORDER = resolve_field_order(VALID_TICKETS, FIELD_RANGES)
     result = multiply_departure_fields(MY_TICKET, FIELD_ORDER)
     print(f"My ticket six departure values multiplied is {result}")

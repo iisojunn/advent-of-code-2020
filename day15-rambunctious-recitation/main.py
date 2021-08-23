@@ -4,9 +4,8 @@
 def play_round(numbers, indices):
     last = numbers[-1]
     last_indices = indices.get(last)
-    if last_indices:
-        if len(last_indices) > 1:
-            return last_indices[-1] - last_indices[-2]
+    if last_indices and len(last_indices) > 1:
+        return last_indices[-1] - last_indices[-2]
     return 0
 
 

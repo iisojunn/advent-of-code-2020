@@ -11,9 +11,8 @@ def read_input():
 def find_two_addends(numbers, target):
     for x in numbers:
         for y in numbers:
-            if x != y:
-                if x + y == target:
-                    return x, y
+            if x != y and x + y == target:
+                return x, y
 
 
 def solve_part_1():

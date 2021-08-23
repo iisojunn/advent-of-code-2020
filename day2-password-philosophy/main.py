@@ -15,10 +15,10 @@ def is_valid_with_old_policy(entry):
 
 
 def check_valid_passwords(validation_method):
-    valid_passwords = 0
-    for entry_line in read_input():
-        if validation_method(entry_line):
-            valid_passwords += 1
+    valid_passwords = sum(
+        1 for entry_line in read_input() if validation_method(entry_line)
+    )
+
     print(f"Valid passwords {valid_passwords}")
 
 

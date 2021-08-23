@@ -38,7 +38,7 @@ def directions(row):
 
 def black_tiles(tile_coordinates):
     flip_counts = tile_flip_counts(tile_coordinates)
-    return set(tile for tile, count in flip_counts.items() if count % 2 == 1)
+    return {tile for tile, count in flip_counts.items() if count % 2 == 1}
 
 
 def tile_flip_counts(tile_coordinates):
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     print(f"Black tiles after executing instructions {len(BLACK_TILES)}")
     assert(len(BLACK_TILES) == 228)
 
-    for DAY in range(1, 101):
+    for _ in range(1, 101):
         BLACK_TILES = daily_flip(BLACK_TILES)
     print(f"Black tiles after 100 days {len(BLACK_TILES)}")
     assert(len(BLACK_TILES) == 3672)

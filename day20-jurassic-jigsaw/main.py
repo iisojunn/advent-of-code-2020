@@ -51,7 +51,7 @@ class Tile:
 
     @property
     def right_side(self):
-        return "".join([row[-1] for row in self.data])
+        return "".join(row[-1] for row in self.data)
 
     @property
     def downside(self):
@@ -59,7 +59,7 @@ class Tile:
 
     @property
     def left_side(self):
-        return "".join([row[0] for row in self.data])
+        return "".join(row[0] for row in self.data)
 
     def flip(self):
         self.data = numpy.flipud(self.data)
@@ -228,15 +228,15 @@ def image_list(image_dict):
 
 def monster_areas(image, monster):
     monster_ = monster.splitlines()
-    for y in range(0, len(image) - len(monster_)):
-        for x in range(0, len(image[0]) - len(monster_[0])):
+    for y in range(len(image) - len(monster_)):
+        for x in range(len(image[0]) - len(monster_[0])):
             sub_area = image[y:y + len(monster_), x:x + len(monster_[0])]
-            sub_string = "\n".join(["".join(row) for row in sub_area])
+            sub_string = "\n".join("".join(row) for row in sub_area)
             yield sub_string
 
 
 def sea_monster_count(image, monster):
-    return sum([monster_count(data, monster) for data in orientations(image)])
+    return sum(monster_count(data, monster) for data in orientations(image))
 
 
 def monster_count(image, monster):
