@@ -46,7 +46,7 @@ def adjacent_spots(layout, x, y):
     for x0 in range(max(0, x - 1), min(x + 1, width) + 1):
         for y0 in range(max(0, y - 1), min(y + 1, height) + 1):
             try:
-                if not (x0 == x and y0 == y):
+                if x0 != x or y0 != y:
                     adjacents.append(layout[y0][x0])
             except IndexError:
                 continue
@@ -70,8 +70,8 @@ def is_empty(spot):
 
 
 def seats_changed(new_layout, layout):
-    return any([new_spot != current_spot for new_spot, current_spot
-                in zip(chain(*new_layout), chain(*layout))])
+    return any(new_spot != current_spot for new_spot, current_spot
+                    in zip(chain(*new_layout), chain(*layout)))
 
 
 def count_occupied(layout):

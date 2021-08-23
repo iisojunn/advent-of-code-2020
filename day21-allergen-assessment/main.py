@@ -69,7 +69,7 @@ def resolve_dangerous(suspicious):
 
 def canonical_dangerous_ingredient_list(dangerous):
     ordered = OrderedDict(sorted(dangerous.items(), key=lambda x: x[0]))
-    return ",".join([allergen for allergen in ordered.values()])
+    return ",".join(ordered.values())
 
 
 if __name__ == '__main__':
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     INGREDIENTS, ALLERGENS = separate_components(FOODS)
     SUSPICIOUS = find_suspicious_ingredients(FOODS)
     ALLERGEN_FREE = allergen_free_ingredients(INGREDIENTS, SUSPICIOUS)
-    APPEARANCE = sum([COUNTS[ingredient] for ingredient in ALLERGEN_FREE])
+    APPEARANCE = sum(COUNTS[ingredient] for ingredient in ALLERGEN_FREE)
     print(f"Allergen free ingredients appear {APPEARANCE} times")
 
     DANGEROUS = resolve_dangerous(SUSPICIOUS)

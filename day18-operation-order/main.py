@@ -14,7 +14,7 @@ def resolve_value(string, additions_before=False):
         if element == "(":
             match = matching_parenthesis(string[i:])
             element = resolve_value(string[i + 1:i + match], additions_before)
-            for skip in range(match):
+            for _ in range(match):
                 next(math_string)
         if str(element) in '*+':
             operators.append(element)
@@ -60,8 +60,10 @@ def calculate_with_same_precedence(values, operators):
 
 if __name__ == '__main__':
     math_problems = read_input()
-    VALUE = sum([resolve_value(line) for line in math_problems])
+    VALUE = sum(resolve_value(line) for line in math_problems)
     print(f"Total sum for math problems with same precedence is {VALUE}")
     VALUE2 = sum(
-        [resolve_value(line, additions_before=True) for line in math_problems])
+        resolve_value(line, additions_before=True) for line in math_problems
+    )
+
     print(f"Total sum for math problems with addition precedence is {VALUE2}")

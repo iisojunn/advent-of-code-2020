@@ -126,8 +126,7 @@ class TestMain(unittest.TestCase):
     @staticmethod
     def _create_test_tile():
         data = numpy.array([list(row) for row in IMAGE.splitlines()])
-        tile = Tile(1, data)
-        return tile
+        return Tile(1, data)
 
     def test_corner_tiles(self):
         _, corner_tiles = self._get_tiles_corner_tiles()

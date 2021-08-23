@@ -45,10 +45,7 @@ def valid_with_sub_rule(message, sub_rule, rules):
 
 def is_valid(message, rules):
     sub_rule_to_check = rules[0]
-    for msg_left in valid_with_sub_rule(message, sub_rule_to_check, rules):
-        if not msg_left:
-            return True
-    return False
+    return not all(valid_with_sub_rule(message, sub_rule_to_check, rules))
 
 
 if __name__ == '__main__':

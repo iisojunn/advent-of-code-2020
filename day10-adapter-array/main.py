@@ -29,7 +29,7 @@ def lengths_of_one_rows(step_list):
     for step in step_list:
         if step == 1:
             found_ones += 1
-        elif step != 1 and found_ones > 0:
+        elif found_ones > 0:
             rows_of_ones.append(found_ones)
             found_ones = 0
     return rows_of_ones

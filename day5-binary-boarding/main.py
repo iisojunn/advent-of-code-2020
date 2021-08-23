@@ -12,8 +12,8 @@ def fb_to_01(binary_row):
 
 def row_number(binary_row):
     values = [64, 32, 16, 8, 4, 2, 1]
-    return sum([int(binary) * value for binary, value
-                in zip(binary_row, values)])
+    return sum(int(binary) * value for binary, value
+                    in zip(binary_row, values))
 
 
 def lr_to_01(binary_column):
@@ -22,8 +22,8 @@ def lr_to_01(binary_column):
 
 def column_number(binary_column):
     values = [4, 2, 1]
-    return sum([int(binary) * value for binary, value
-                in zip(binary_column, values)])
+    return sum(int(binary) * value for binary, value
+                    in zip(binary_column, values))
 
 
 def calculate_seat_id(boarding_pass):

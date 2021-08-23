@@ -27,7 +27,7 @@ def all_yes_answers():
 
 
 if __name__ == '__main__':
-    any_yes = sum([len(answers) for answers in any_yes_answers()])
+    any_yes = sum(len(answers) for answers in any_yes_answers())
     print(f"Sum of any yes answers by groups is {any_yes}")
-    all_yes = sum([len(answers) for answers in all_yes_answers()])
+    all_yes = sum(len(answers) for answers in all_yes_answers())
     print(f"Sum of all yes answers by groups is {all_yes}")

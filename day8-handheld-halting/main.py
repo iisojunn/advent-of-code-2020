@@ -69,8 +69,7 @@ def code_candidates(code):
 def fix_loop_and_execute(code):
     for code_candidate in code_candidates(code):
         try:
-            acc = execute_until_last_command(code_candidate)
-            return acc
+            return execute_until_last_command(code_candidate)
         except LastCommandNotReached:
             continue
 

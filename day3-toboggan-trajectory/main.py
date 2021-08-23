@@ -24,10 +24,7 @@ def trees_on_the_path(tree_map, right, down):
 
 
 def trees_on_multiple_paths(tree_map, paths):
-    encountered_trees = []
-    for right, down in paths:
-        encountered_trees.append(trees_on_the_path(tree_map, right, down))
-    return encountered_trees
+    return [trees_on_the_path(tree_map, right, down) for right, down in paths]
 
 
 if __name__ == '__main__':
